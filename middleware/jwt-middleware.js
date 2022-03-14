@@ -3,8 +3,12 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const middleware = express.Router();
 
+///////////
+// const router = express.Router();
+///////////
 
-middleware.use((req,res,next) =>{
+module.exports.middleware.use ((req,res,next) =>{
+    
     const token = req.headers['x-access-token']
     if (token){
         const decode = jwt.verify(token, app.get('key'), (err, decoded)=>{
@@ -17,4 +21,7 @@ middleware.use((req,res,next) =>{
     else{
         return res.status(401).send({mensaje: 'Token no proporcionado'});
     }
+    
 })
+
+module.exports = middleware; 
