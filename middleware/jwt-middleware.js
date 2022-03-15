@@ -3,11 +3,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const middleware = express.Router();
 
-///////////
-// const router = express.Router();
-///////////
-
-module.exports.middleware.use ((req,res,next) =>{
+middleware.use ((req,res,next) =>{
     
     const token = req.headers['x-access-token']
     if (token){

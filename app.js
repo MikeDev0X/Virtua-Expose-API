@@ -20,7 +20,6 @@ app.use(express.json());
 app.set("key", config.key);
 
 app.use('/',logro);
-app.use('/',token_login);
 
 //Función callback -> función que se ejecuta como respuesta a un evento o acción
 app.listen(port, () =>{
