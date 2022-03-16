@@ -41,14 +41,16 @@ app.post ('/login', (req,res) =>{
         user: req.body.user
     }
 
+    console.log(user,password);
+
     if(user==="Mike" && password==="123"){
         token = jwt.sign(payload, app.get("key"),{expiresIn: 7200})
         mensaje= 'Usuario y contraseña autenticados'
     }
 
     res.json({
-        mensaje: mensaje,
-        token: token
+        mensaje,
+        token
     })
 })
 

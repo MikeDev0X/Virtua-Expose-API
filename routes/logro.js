@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const logroController = require('../controller/logro.controller');
-//const middleware = require('../middleware/jwt-middleware');
-const middleware = express.Router();
+const middleware = require('../middleware/jwt-middleware');
+//const middleware = express.Router();
 
 
 router.get('/logros', middleware, logroController.getLogros);
