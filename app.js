@@ -4,10 +4,6 @@ const config = require('./config/jwt');
 const logro = require('./routes/logro');
 const login = require('./routes/token');
 
-//const res = require('express/lib/response');
-
-////////////////////// token.controller.js
-////////////////////// token.js
 const router = express.Router();
 ////////////////////////
 
