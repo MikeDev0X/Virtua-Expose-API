@@ -3,6 +3,7 @@ const res = require('express/lib/response');
 const config = require('./config/jwt');
 const logro = require('./routes/logro');
 const login = require('./routes/token');
+const signUp = require('./routes/signUp');
 
 const router = express.Router();
 ////////////////////////
@@ -17,6 +18,8 @@ app.set("key", config.key);
 app.use('/',logro);
 
 app.use('/',login);
+
+app.use('/',signUp);
 
 //Función callback -> función que se ejecuta como respuesta a un evento o acción
 app.listen(port, () =>{

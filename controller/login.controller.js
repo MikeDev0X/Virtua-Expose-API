@@ -16,7 +16,7 @@ module.exports.login = (req,res) =>{
         user: req.body.user
     }
 
-    console.log(user,password);
+    console.log(req.body);
 
     if(user==="Mike" && password==="123"){
         token = jwt.sign(payload, config.key ,{expiresIn: 7200})
@@ -27,4 +27,4 @@ module.exports.login = (req,res) =>{
         mensaje,
         token
     })
-}   
+}       
