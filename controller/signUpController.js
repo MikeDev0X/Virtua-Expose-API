@@ -5,9 +5,9 @@ const conexion = mysql.createConnection(mysqlConfig);
 
 module.exports.insertUsuario = (req,res) =>{
     const body= req.body;
-    const sql = `INSERT INTO usuario(idUsuario, realname, nickname, correo, contraseña) VALUES(?,?,?,?,?)`
+    const sql = `INSERT INTO usuario(realname, nickname, correo, contraseña) VALUES(?,?,?,?)`
 
-    conexion.query(sql, [body.idUsuario, body.realname, body.nickname, body.correo, body.contraseña], (error, results, fields)=>{
+    conexion.query(sql, [body.realname, body.nickname, body.correo, body.contraseña], (error, results, fields)=>{
 
         if(error)
         res.send(error);
