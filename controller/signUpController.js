@@ -37,10 +37,10 @@ module.exports.getUsuarios = (req,res) =>{
 }
 
 module.exports.removeUser = (req,res) =>{
-    const sql = `DELETE FROM usuario WHERE nickname=?`
+    const sql = `DELETE FROM usuario WHERE idUsuario=?`
     const req1 = req.params.id;
 
-    conexion.query(sql, [req.params.nickname], (error, results, fields)=>{
+    conexion.query(sql, [req.params.id], (error, results, fields)=>{
         if(error)
             res.send(error);
 
