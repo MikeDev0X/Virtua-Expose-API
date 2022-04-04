@@ -15,7 +15,7 @@ module.exports.getUserExperienceByNickname = (req,res) =>{
 }
 
 module.exports.giveExperienceByNickname = (req,res) =>{
-    const sql = `UPDATE usuario SET experience WHERE nickname = ?` //experience? , userexperience? 
+    const sql = `UPDATE usuario SET experience WHERE nickname = ?` //experience? , userexperience?  
     const body = req.body;
 
     conexion.query(sql, [body.experience, body.nickname], (error, results, fields)=>{
