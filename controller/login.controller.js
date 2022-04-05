@@ -29,58 +29,53 @@ module.exports.login = (req,res) =>{
 
     console.log(req.body);
 
-    function userFun(){
-        return new Promise ((resolve, reject) =>{
+    function Fun (pw){
 
-            conexion.query(sql, [user], (error, results, fields) =>{
-                if(error)
-                    res.send(error);
-                else{
-                    //console.log(results[0]);
-                    resultUser = results[0];
-                    resolve(resultUser);
-                }
-            })
-        })
-    }
+        conexion.query(sql, [user], (error, results, fields) =>{
+            if(error)
+                res.send(error);
+            else{
+                //console.log(results[0]);
+                resultUser = results[0];
+    
+                conexion.query(sql2, [user], (error, results2, fields) =>{
+                    console.log(resultUser);
+                    console.log(resultUser.idUsuario != undefined);
 
-    function passwordFun(pw){
-        return new Promise ((resolve, reject) =>{
-
-            conexion.query(sql2, [user], (error, results2, fields) =>{
-                if(error)
-                    res.send(error);
-                else{
-                    //console.log(results2[0]);
-                    resultPassword = results2[0];
-
-                    if(resultPassword.contrasena == pw){
-                        resolve(resultPassword);
-                    }
+                    if(error)
+                        res.send(error);
                     else{
-                        return Promise.resolve(false);
-                        reject("password doesn't match");
+                        resultPassword = results2[0];
+
+                        console.log(resultPassword.contrasena === pw);
+
+                        if(resultUser.idUsuario != undefined && resultPassword.contrasena === pw){
+                            token = jwt.sign(payload, config.key ,{expiresIn: 7200})
+                            mensaje= 'Usuario y contraseña autenticados'
+                        }
+                        console.log(resultPassword.contrasena);
+                        console.log(pw);
+
+
                     }
-                }
-            })
+
+                    res.json({
+                        mensaje,
+                        token
+                    })
+                })
+            }
         })
     }
 
-    const getPasswordFun = async () => {
-        const kiti1 = await passwordFun(password);
-        return kiti1;
-    }
-
-    console.log("KITI1: ");
-    console.log(getPasswordFun);
-
+    Fun(password);
 
     //passwordFun().then((user) => console.log(resultPassword.contrasena === password))
 
     //kiti1 = (userFun().then((user)));
     //console.log(kiti1);
 
-
+    /*
     if ((userFun().then((user)))&&(passwordFun(password).then((user)))){
             console.log((userFun().then((user)))&&(passwordFun(password).then((user))))
             //passwordFun().then((user) => console.log(resultPassword.contrasena == password))
@@ -93,10 +88,6 @@ module.exports.login = (req,res) =>{
         //console.log(results);
         mensaje = "El usuario no existe!";
     }
-
-    res.json({
-        mensaje,
-        token
-    })
+    */
 
 }       
