@@ -39,22 +39,29 @@ module.exports.login = (req,res) =>{
                 resultUser = results[0];
     
                 conexion.query(sql2, [user], (error, results2, fields) =>{
-                    console.log(resultUser);
-                    console.log(resultUser.idUsuario != undefined);
+                    //console.log(resultUser);
+                    //console.log(resultUser.idUsuario != undefined);
 
                     if(error)
                         res.send(error);
                     else{
                         resultPassword = results2[0];
 
-                        console.log(resultPassword.contrasena === pw);
+                        //console.log(resultPassword.contrasena === pw);
 
-                        if(resultUser.idUsuario != undefined && resultPassword.contrasena === pw){
-                            token = jwt.sign(payload, config.key ,{expiresIn: 7200})
-                            mensaje= 'Usuario y contraseña autenticados'
+                        console.log(resultUser);
+                        console.log(resultPassword);
+
+                        if(resultUser != undefined ){
+                            if(resultPassword.contrasena === pw){
+
+                                token = jwt.sign(payload, config.key ,{expiresIn: 7200})
+                                mensaje= 'Usuario o contraseña autenticados'
+
+                            }
                         }
-                        console.log(resultPassword.contrasena);
-                        console.log(pw);
+                        //console.log(resultPassword.contrasena);
+                        //console.log(pw);
 
 
                     }
