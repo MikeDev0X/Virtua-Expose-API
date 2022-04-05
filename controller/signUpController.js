@@ -2,12 +2,19 @@ const res = require('express/lib/response');
 const mysql = require('mysql');
 const mysqlConfig = require('../helpers/mysql-config');
 const conexion = mysql.createConnection(mysqlConfig);
-const mensaje = "kiti";
 
 module.exports.insertUsuario = (req,res) =>{
     const body= req.body;
     let mensaje = "El usuario ya existe";
     const sql = `INSERT INTO usuario(realname, nickname, correo, contrasena, experience) VALUES(?,?,?,?,?)`
+    const sql2 = `SELECT idUsuario FROM usuario WHERE nickname=?`
+    const user = req.body.user;
+
+    conexion.query(sql2, [])
+
+
+
+
 
     conexion.query(sql, [body.realname, body.nickname, body.correo, body.contrasena, body.experience], (error, results, fields)=>{
 
