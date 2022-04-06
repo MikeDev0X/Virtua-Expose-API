@@ -1,35 +1,63 @@
 const res = require('express/lib/response');
 const mysql = require('mysql');
 const mysqlConfig = require('../helpers/mysql-config');
+const { NULL } = require('mysql/lib/protocol/constants/types');
 const conexion = mysql.createConnection(mysqlConfig);
 
 module.exports.insertUsuario = (req,res) =>{
+
     const body= req.body;
     let mensaje = "El usuario ya existe";
-    const sql = `INSERT INTO usuario(realname, nickname, correo, contrasena, experience) VALUES(?,?,?,?,?)`
-    const sql2 = `SELECT idUsuario FROM usuario WHERE nickname=?`
+    const sq = `INSERT INTO usuario(realname, nickname, correo, contrasena, experience) VALUES(?,?,?,?,?)`
+    const sql = `SELECT idUsuario FROM usuario WHERE nickname = ?`
     const user = req.body.user;
-
-    conexion.query(sql2, [])
-
+    let resultUser;
 
 
+    function Fun(){
+
+        conexion.query(sql, [user], (error,results,fields)=>{
+                resultUser = results[0];
+                console.log(resultUser);
+
+            if (error)
+                res.send(error)
+            else{
+                
+                conexion.query(sq, [body.realname, body.nickname, body.correo, body.contrasena, body.experience], (error, resultsInsert, fields)=>{
+
+                    //console.log("resultsInsert: " );
+                    //console.log(resultsInsert);
+
+                    if(error){
+                        res.send(error);
+                    }
+
+                    else{
+                        console.log(resultUser);
+                        if(resultUser == undefined)
+                            mensaje = 'Usuario insertado correctamente'
+                    }
+            
+                    res.json({
+                        mensaje
+                    });
+                })
+            }
+        })
+
+    }
+    
+    Fun();
 
 
-    conexion.query(sql, [body.realname, body.nickname, body.correo, body.contrasena, body.experience], (error, results, fields)=>{
 
-        if(error){
-            console.log('kiti');
-            res.send(error);
-        }
-        else{
-            mensaje = 'Usuario insertado correctamente'
-        }
 
-        res.json({
-            mensaje
-        });
-    })
+
+
+
+
+
     console.log(body);
 }
 
@@ -53,4 +81,34 @@ module.exports.removeUser = (req,res) =>{
 
         res.json(results)
     })
+}
+
+module.exports.removeUsers = async (req,res) =>{
+    const sql = `DELETE FROM usuario WHERE idUsuario=?`;
+    const reqId = req.params.id;
+    const reqNum = req.params.num;
+
+    //console.log(reqNum);
+
+    let reqIdInt = parseInt(reqId);
+    let reqIdIntToString;
+
+    for(let x=0; x<parseInt(reqNum); x++){
+        if(x!=0){
+            reqIdInt = reqIdInt + 1;
+            //console.log(reqIdInt);
+        }
+
+        reqIdIntToString = reqIdInt.toString();
+        //console.log(reqIdIntToString);
+        //console.log(x);
+
+        conexion.query(sql,[reqIdIntToString],(error, results, fields)=>{
+            //console.log(results);
+
+            if(error)
+                res.send(error)
+            res.json(results);
+        })
+    }
 }

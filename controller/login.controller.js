@@ -15,7 +15,6 @@ module.exports.login = (req,res) =>{
     let resultUser;
     let resultPassword;
 
-
     //
     let mensaje = 'Usuario y contraseña inválidos'
 
@@ -35,12 +34,10 @@ module.exports.login = (req,res) =>{
             if(error)
                 res.send(error);
             else{
-                //console.log(results[0]);
+                console.log(results[0]);
                 resultUser = results[0];
     
                 conexion.query(sql2, [user], (error, results2, fields) =>{
-                    //console.log(resultUser);
-                    //console.log(resultUser.idUsuario != undefined);
 
                     if(error)
                         res.send(error);
@@ -60,10 +57,6 @@ module.exports.login = (req,res) =>{
 
                             }
                         }
-                        //console.log(resultPassword.contrasena);
-                        //console.log(pw);
-
-
                     }
 
                     res.json({
