@@ -10,55 +10,52 @@ module.exports.insertUsuario = (req,res) =>{
     let mensaje = "El usuario ya existe";
     const sq = `INSERT INTO usuario(realname, nickname, correo, contrasena, experience) VALUES(?,?,?,?,?)`
     const sql = `SELECT idUsuario FROM usuario WHERE nickname = ?`
-    const user = req.body.user;
+    const user = req.body.nickname;
     let resultUser;
 
-
-    function Fun(){
+    async function Fun(){
 
         conexion.query(sql, [user], (error,results,fields)=>{
-                resultUser = results[0];
-                console.log(resultUser);
+                
 
             if (error)
                 res.send(error)
             else{
                 
-                conexion.query(sq, [body.realname, body.nickname, body.correo, body.contrasena, body.experience], (error, resultsInsert, fields)=>{
+                resultUser = results[0];
+                console.log("resultUser, first query");
+                console.log(resultUser);
 
-                    //console.log("resultsInsert: " );
-                    //console.log(resultsInsert);
+                if (resultUser == undefined){
+                    mensaje = 'Usuario insertado correctamente'
 
-                    if(error){
-                        res.send(error);
-                    }
+                    conexion.query(sq, [body.realname, body.nickname, body.correo, body.contrasena, body.experience], (error, resultsInsert, fields)=>{
 
-                    else{
-                        console.log(resultUser);
-                        if(resultUser == undefined)
-                            mensaje = 'Usuario insertado correctamente'
-                    }
-            
-                    res.json({
-                        mensaje
-                    });
-                })
+                        if(error){
+                            res.send(error);
+                        }
+    
+                        else{
+                            console.log(resultUser);
+                        }  
+                    })
+                }
+                res.json({
+                    mensaje
+                });
             }
         })
-
     }
     
     Fun();
 
-
-
-
-
-
-
-
-
     console.log(body);
+    if (mensaje==='Usuario insertado correctamente'){
+        return true;         
+    }
+    else{
+        return false;
+    }
 }
 
 module.exports.getUsuarios = (req,res) =>{
@@ -100,11 +97,9 @@ module.exports.removeUsers = async (req,res) =>{
         }
 
         reqIdIntToString = reqIdInt.toString();
-        //console.log(reqIdIntToString);
-        //console.log(x);
 
         conexion.query(sql,[reqIdIntToString],(error, results, fields)=>{
-            //console.log(results);
+
 
             if(error)
                 res.send(error)
