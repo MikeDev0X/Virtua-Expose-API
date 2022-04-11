@@ -5,7 +5,7 @@ const conexion = mysql.createConnection(mysqlConfig);
 
 
 module.exports.getUserExperienceByNickname = (req,res) =>{
-    const sql = `SELECT Experience FROM usuario WHERE nickname = ?`
+    const sql = `SELECT experience FROM usuario WHERE nickname = ?`
     conexion.query(sql,[req.params.nickname],(error,results,fields) =>{
         if(error)
             res.send(error);
@@ -15,14 +15,35 @@ module.exports.getUserExperienceByNickname = (req,res) =>{
 }
 
 module.exports.giveExperienceByNickname = (req,res) =>{
-    const sql = `UPDATE usuario SET experience WHERE nickname = ?` //experience? , userexperience?  
+    const sql = `UPDATE usuario SET experience=? WHERE nickname = ?` //experience? , userexperience?  
+    const sql2 = `SELECT experience FROM usuario WHERE nickname = ?`
+    
+
     const body = req.body;
 
-    conexion.query(sql, [body.experience, body.nickname], (error, results, fields)=>{
-        if(error)
-            res.send(error);
+    console.log(body);
 
-        res.json(results);
+
+    conexion.query(sql2, [body.nickname], (error,results,fields)=>{
+        
+        //console.log(results);
+        let currExperience = parseInt(results[0].experience);
+        //console.log(currExperience);
+
+        let updatedExperience = parseInt(body.experience) + currExperience;
+        //console.log(updatedExperience);
+
+        conexion.query(sql, [updatedExperience.toString(), body.nickname], (error, results, fields)=>{
+          //  console.log(updatedExperience.toString());
+            if(error)
+                res.send(error);
+    
+            res.json(results);
+        })
+
     })
+
+
+
 
 }

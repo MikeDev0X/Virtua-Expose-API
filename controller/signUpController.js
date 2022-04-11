@@ -93,7 +93,6 @@ module.exports.removeUsers = async (req,res) =>{
     for(let x=0; x<parseInt(reqNum); x++){
         if(x!=0){
             reqIdInt = reqIdInt + 1;
-            //console.log(reqIdInt);
         }
 
         reqIdIntToString = reqIdInt.toString();

@@ -5,7 +5,8 @@ const logro = require('./routes/logro');
 const login = require('./routes/token');
 const signUp = require('./routes/signUp');
 const experience = require('./routes/experience');
-
+const multer = require('multer');
+const cors =require('cors');
 
 
 const router = express.Router();
@@ -14,6 +15,12 @@ const router = express.Router();
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+////////////////7
+app.use(cors());
+app.use(multer().array());
+/////////////////
+
 
 app.use(express.json());
 app.set("key", config.key);
