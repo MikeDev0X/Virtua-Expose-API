@@ -25,21 +25,23 @@ module.exports.giveExperienceByNickname = (req,res) =>{
 
 
     conexion.query(sql2, [body.nickname], (error,results,fields)=>{
-        
-        //console.log(results);
-        let currExperience = parseInt(results[0].experience);
-        //console.log(currExperience);
 
-        let updatedExperience = parseInt(body.experience) + currExperience;
-        //console.log(updatedExperience);
-
-        conexion.query(sql, [updatedExperience.toString(), body.nickname], (error, results, fields)=>{
-          //  console.log(updatedExperience.toString());
-            if(error)
-                res.send(error);
+        if(error)
+            res.send(error)
+        else{
+            let currExperience = parseInt(results[0].experience);
+            //console.log(currExperience);
+            let updatedExperience = parseInt(body.experience) + currExperience;
+            //console.log(updatedExperience);
     
-            res.json(results);
-        })
+            conexion.query(sql, [updatedExperience.toString(), body.nickname], (error, results, fields)=>{
+              //  console.log(updatedExperience.toString());
+                if(error)
+                    res.send(error);
+        
+                res.json(results);
+            })
+        }
 
     })
 
