@@ -50,6 +50,12 @@ module.exports.login = (req,res) =>{
                         console.log(resultPassword);
 
                         if(resultUser != undefined ){
+                            console.log("kiti");
+                            console.log("______________")
+                            console.log(resultPassword.contrasena);
+                            console.log(pw);
+                            console.log("______________")
+
                             if(resultPassword.contrasena === pw){
 
                                 token = jwt.sign(payload, config.key ,{expiresIn: 7200})
@@ -58,8 +64,6 @@ module.exports.login = (req,res) =>{
                             }
                         }
                     }
-
-
                     
                     res.json({
                         mensaje,
@@ -71,25 +75,4 @@ module.exports.login = (req,res) =>{
     }
 
     Fun(password);
-
-    //passwordFun().then((user) => console.log(resultPassword.contrasena === password))
-
-    //kiti1 = (userFun().then((user)));
-    //console.log(kiti1);
-
-    /*
-    if ((userFun().then((user)))&&(passwordFun(password).then((user)))){
-            console.log((userFun().then((user)))&&(passwordFun(password).then((user))))
-            //passwordFun().then((user) => console.log(resultPassword.contrasena == password))
-            token = jwt.sign(payload, config.key ,{expiresIn: 7200})
-            mensaje= 'Usuario y contraseña autenticados'
-
-    }
-
-    else{
-        //console.log(results);
-        mensaje = "El usuario no existe!";
-    }
-    */
-
-}       
+}

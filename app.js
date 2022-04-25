@@ -5,6 +5,7 @@ const logro = require('./routes/logro');
 const login = require('./routes/token');
 const signUp = require('./routes/signUp');
 const experience = require('./routes/experience');
+const friend = require('./routes/friend.js');
 const multer = require('multer');
 const cors =require('cors');
 
@@ -21,7 +22,6 @@ app.use(cors());
 app.use(multer().array());
 /////////////////
 
-
 app.use(express.json());
 app.set("key", config.key);
 
@@ -33,6 +33,8 @@ app.use('/',signUp);
 
 app.use('/', experience);
 
+app.use('/',  friend);
+
 //Función callback -> función que se ejecuta como respuesta a un evento o acción
 app.listen(port, () =>{
     console.log(`Servidor iniciado en el puerto ${port}`);
@@ -40,5 +42,3 @@ app.listen(port, () =>{
 
 
 ///////////////////////////////////// login -> removed function
-
-
