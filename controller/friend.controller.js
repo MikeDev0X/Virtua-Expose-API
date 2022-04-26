@@ -21,3 +21,4 @@ module.exports.getAllFriends = (req,res) =>{
             res.json(results);
         })
 }
+

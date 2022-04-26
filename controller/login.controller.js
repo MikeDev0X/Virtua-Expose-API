@@ -12,6 +12,7 @@ module.exports.login = (req,res) =>{
     const password = req.body.password;
     const sql = `SELECT idUsuario FROM usuario WHERE nickname = ?`
     const sql2 = `SELECT contrasena FROM usuario WHERE nickname=?`
+    let idUsuario;
     let resultUser;
     let resultPassword;
 
@@ -34,8 +35,9 @@ module.exports.login = (req,res) =>{
             if(error)
                 res.send(error);
             else{
-                console.log(results[0]);
+                //console.log(results[0]);
                 resultUser = results[0];
+                idUsuario = resultUser.idUsuario;
     
                 conexion.query(sql2, [user], (error, results2, fields) =>{
 
@@ -47,14 +49,9 @@ module.exports.login = (req,res) =>{
                         //console.log(resultPassword.contrasena === pw);
 
                         console.log(resultUser);
-                        console.log(resultPassword);
+                        //console.log(resultPassword);
 
                         if(resultUser != undefined ){
-                            console.log("kiti");
-                            console.log("______________")
-                            console.log(resultPassword.contrasena);
-                            console.log(pw);
-                            console.log("______________")
 
                             if(resultPassword.contrasena === pw){
 
@@ -67,7 +64,8 @@ module.exports.login = (req,res) =>{
                     
                     res.json({
                         mensaje,
-                        token
+                        token,
+                        idUsuario
                     })
                 })
             }

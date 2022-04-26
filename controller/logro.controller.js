@@ -22,6 +22,17 @@ module.exports.getLogroById = (req,res) =>{
         })
 }
 
+module.exports.getLogrosFromUser = (req,res) =>{
+    const sql = `SELECT nombre FROM logro WHERE idLogro IN (SELECT idLogro FROM usuariologro WHERE idUsuario = ?)`
+        conexion.query(sql,[req.params.id],(error,results,fields) =>{
+            if(error)
+                res.send(error);
+
+            res.json(results);
+        })
+}
+
+
 module.exports.insertLogro = (req,res)=>{
     const body = req.body;
     const sql = `INSERT INTO logro(nombre,descripcion) VALUES(?,?)`

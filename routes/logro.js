@@ -6,6 +6,7 @@ const middleware = require('../middleware/jwt-middleware');
 
 router.get('/logros', middleware, logroController.getLogros);
 router.get('/logro/:id', middleware, logroController.getLogroById);
+router.get('/logrosFromUser/:id', middleware, logroController.getLogrosFromUser);
 router .post('/logro', middleware, logroController.insertLogro);
 router.put('/logro', middleware, logroController.updateLogro);
 router.delete('/logro/:id', middleware, logroController.deleteLogro);
