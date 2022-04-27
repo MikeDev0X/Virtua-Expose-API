@@ -22,12 +22,22 @@ module.exports.getLogroById = (req,res) =>{
         })
 }
 
-module.exports.getLogrosFromUser = (req,res) =>{
+module.exports.getLogrosFromUserWithId = (req,res) =>{
     const sql = `SELECT nombre FROM logro WHERE idLogro IN (SELECT idLogro FROM usuariologro WHERE idUsuario = ?)`
         conexion.query(sql,[req.params.id],(error,results,fields) =>{
             if(error)
                 res.send(error);
 
+            res.json(results);
+        })
+}
+
+
+module.exports.getLogrosFromUserWithNickname = (req,res) =>{
+    const sql =   `SELECT nombre FROM logro WHERE idLogro IN (SELECT idLogro FROM usuariologro WHERE idUsuario IN (SELECT idUsuario FROM usuario WHERE nickname = ?))`
+        conexion.query(sql,[req.params.nickname],(error,results,fields) =>{
+            if(error)
+                res.send(error);
             res.json(results);
         })
 }
