@@ -8,7 +8,7 @@ module.exports.insertUsuario = (req,res) =>{
 
     const body= req.body;
     let mensaje = "El usuario ya existe";
-    const sq = `INSERT INTO usuario(realname, nickname, correo, contrasena, experience) VALUES(?,?,?,?,?)`
+    const sq = `INSERT INTO usuario(realname, nickname, correo, contrasena, experience) VALUES(?,?,?,?,0)`
     const sql = `SELECT idUsuario FROM usuario WHERE nickname = ?`
     const user = req.body.nickname;
     let resultUser;

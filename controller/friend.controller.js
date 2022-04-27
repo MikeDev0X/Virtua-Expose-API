@@ -23,7 +23,6 @@ module.exports.getFriendsFromUserWithNickname = (req,res) =>{
 
 }
 
-
 module.exports.getAllFriends = (req,res) =>{
     const sql = `SELECT * FROM amigos`;
         conexion.query(sql, (error,results,fields)=>{
