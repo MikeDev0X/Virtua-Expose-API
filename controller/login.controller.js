@@ -16,7 +16,6 @@ module.exports.login = (req,res) =>{
     let resultUser;
     let resultPassword;
 
-    //
     let mensaje = 'Usuario y contraseña inválidos'
 
     ////////////////
