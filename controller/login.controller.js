@@ -16,7 +16,7 @@ module.exports.login = (req,res) =>{
     let resultUser;
     let resultPassword;
 
-    let mensaje = 'Usuario y contraseña inválidos'
+    let mensaje = 'Usuario o contraseña inválidos' //mensaje updated
 
     ////////////////
     let token = '';
@@ -35,38 +35,51 @@ module.exports.login = (req,res) =>{
                 res.send(error);
             else{
                 //console.log(results[0]);
-                resultUser = results[0];
-                idUsuario = resultUser.idUsuario;
+
+
+                if(results[0] != undefined){
+
+                    resultUser = results[0];
+                    idUsuario = resultUser.idUsuario;
+        
+                    conexion.query(sql2, [user], (error, results2, fields) =>{
     
-                conexion.query(sql2, [user], (error, results2, fields) =>{
-
-                    if(error)
-                        res.send(error);
-                    else{
-                        resultPassword = results2[0];
-
-                        //console.log(resultPassword.contrasena === pw);
-
-                        console.log(resultUser);
-                        //console.log(resultPassword);
-
-                        if(resultUser != undefined ){
-
-                            if(resultPassword.contrasena === pw){
-
-                                token = jwt.sign(payload, config.key ,{expiresIn: 7200})
-                                mensaje= 'Usuario o contraseña autenticados'
-
+                        if(error)
+                            res.send(error);
+                        else{
+                            resultPassword = results2[0];
+    
+                            //console.log(resultPassword.contrasena === pw);
+    
+                            console.log(resultUser);
+                            //console.log(resultPassword);
+    
+                            if(resultUser != undefined ){
+    
+                                if(resultPassword.contrasena === pw){
+    
+                                    token = jwt.sign(payload, config.key ,{expiresIn: 7200})
+                                    mensaje= 'Usuario o contraseña autenticados'
+    
+                                }
                             }
                         }
-                    }
-                    
-                    res.json({
-                        mensaje,
-                        token,
-                        idUsuario
+                        
+                        res.json({
+                            mensaje,
+                            token,
+                            idUsuario
+                        })
                     })
-                })
+
+                }
+                else{
+                    //mensaje = "" 
+                    res.json({
+                        mensaje
+                    })
+                }
+
             }
         })
     }

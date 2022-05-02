@@ -15,7 +15,7 @@ const router = express.Router();
 const app = express();
 const port = process.env.PORT || 4000;
 
-////////////////7
+////////////////
 app.use(cors());
 app.use(multer().array());
 /////////////////
