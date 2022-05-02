@@ -9,10 +9,8 @@ const friend = require('./routes/friend.js');
 const multer = require('multer');
 const cors =require('cors');
 
-
 const router = express.Router();
 ////////////////////////
-
 
 const app = express();
 const port = process.env.PORT || 3000;

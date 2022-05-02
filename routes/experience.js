@@ -4,7 +4,7 @@ const experienceController = require('../controller/experienceController'); //st
 const middleware = require('../middleware/jwt-middleware');
 
 
-router.get('/getExperience', middleware, experienceController.getUserExperienceByNickname);
+router.get('/getExperience/:nickname', middleware, experienceController.getUserExperienceByNickname);
 router.put('/addExperience', middleware, experienceController.giveExperienceByNickname); 
 
 module.exports = router;

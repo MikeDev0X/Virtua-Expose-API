@@ -48,7 +48,7 @@ module.exports.addFriends = (req,res) =>{
         if (error)
             res.send(error);
         else{
-            results2 = results[0]; //idUsuario- friend
+            results2 = results[0]; 
 
             conexion.query(sql5, [idUsuario1],(error,results,fields)=>{
                 if(error)
