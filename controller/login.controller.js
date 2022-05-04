@@ -8,12 +8,12 @@ const conexion = mysql.createConnection(mysqlConfig);
 const crypto = require('crypto');
 ////////
 
-module.exports.login = (req,res) =>{
+module.exports.login = (req, res) => {
 
     const user = req.body.user;
     const password = req.body.password;
     const sql = `SELECT idUsuario FROM usuario WHERE nickname = ?`
-    //const sql2 = `SELECT SHA2(contrasena,224) FROM usuario WHERE nickname=?`
+        //const sql2 = `SELECT SHA2(contrasena,224) FROM usuario WHERE nickname=?`
     const sql2 = `SELECT contrasena FROM usuario WHERE nickname=? `
 
     //const sql3 = `SELECT contrasena FROM usuario WHERE contrasena = SHA2(?,224)`
@@ -33,30 +33,30 @@ module.exports.login = (req,res) =>{
 
     console.log(req.body);
 
-    function Fun (pw){
+    function Fun(pw) {
 
-        conexion.query(sql, [user], (error, results, fields) =>{
-            if(error)
+        conexion.query(sql, [user], (error, results, fields) => {
+            if (error)
                 res.send(error);
-            else{
+            else {
                 //console.log(results[0]); //undefined
-                if(results[0] != undefined){
+                if (results[0] != undefined) {
 
                     resultUser = results[0];
                     idUsuario = resultUser.idUsuario;
-        
-                    conexion.query(sql2, [user], (error, results2, fields) =>{
-    
-                        if(error)
+
+                    conexion.query(sql2, [user], (error, results2, fields) => {
+
+                        if (error)
                             res.send(error);
-                        else{
+                        else {
                             resultPassword = results2[0];
 
                             //////////7
                             let pwd = pw;
                             pwd = crypto.createHash('sha224')
-                            .update(pwd)
-                            .digest('hex');
+                                .update(pwd)
+                                .digest('hex');
                             console.log(pwd);
 
                             ///////////
@@ -65,21 +65,21 @@ module.exports.login = (req,res) =>{
                             //16
 
                             //console.log(resultPassword);
-        
+
                             //console.log(resultUser);
-    
-                            if(resultUser != undefined ){
+
+                            if (resultUser != undefined) {
                                 console.log(resultPassword);
-    
-                                if(resultPassword.contrasena === pwd){
-    
-                                    token = jwt.sign(payload, config.key ,{expiresIn: 7200})
-                                    mensaje= 'Usuario o contraseña autenticados'
-    
+
+                                if (resultPassword.contrasena === pwd) {
+
+                                    token = jwt.sign(payload, config.key, { expiresIn: 7200 })
+                                    mensaje = 'Usuario o contraseña autenticados'
+
                                 }
                             }
                         }
-                        
+
                         res.json({
                             mensaje,
                             token,
@@ -87,8 +87,7 @@ module.exports.login = (req,res) =>{
                         })
                     })
 
-                }
-                else{
+                } else {
                     res.json({
                         mensaje
                     })
@@ -99,4 +98,49 @@ module.exports.login = (req,res) =>{
     }
 
     Fun(password);
+}
+
+module.exports.updatePassword = (req, res) => {
+    const sql = `UPDATE usuario SET contrasena = SHA2(?,224) WHERE idUsuario = ?`;
+    const sql2 = `SELECT idUsuario FROM usuario WHERE idUsuario = ?`
+    const newPw = req.params.contrasena;
+    const idUsuario = req.params.idUsuario;
+    let mensaje = "Password couldn't be updated, there was an error";
+
+    conexion.query(sql2, [idUsuario], (error, results, fields) => {
+        if (error) {
+            res.send(error)
+        } else {
+            if (results[0] != undefined) { //idUsuario exists
+                conexion.query(sql, [newPw, idUsuario], (error, results, fields) => {
+
+                    if (error)
+                        res.send(error)
+                    else {
+                        console.log(req.params);
+                        mensaje = "Password updated successfully";
+                        res.json({
+                            results,
+                            mensaje
+                        })
+
+                        // a7470858e79c282bc2f6adfd831b132672dfd1224c1e78cbf5bcd057
+                        // 
+                        // 565911e4c943a39e9f89edc0a22c71b73fb7a535914e9696c4f3fb12
+
+                    }
+                })
+            } else {
+                mensaje = "User doesn't exist";
+                res.json({
+                    mensaje
+                })
+
+            }
+
+        }
+
+
+    })
+
 }
