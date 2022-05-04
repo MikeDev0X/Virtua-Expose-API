@@ -8,7 +8,8 @@ module.exports.insertUsuario = (req,res) =>{
 
     const body= req.body;
     let mensaje = "El usuario ya existe";
-    const sq = `INSERT INTO usuario(realname, nickname, correo, contrasena, experience) VALUES(?,?,?,?,0)`
+    const sq = `INSERT INTO usuario(realname, nickname, correo, contrasena, experience) VALUES
+    (?,?,?,SHA2(?,224),0)`
     const sql = `SELECT idUsuario FROM usuario WHERE nickname = ?`
     const user = req.body.nickname;
     let resultUser;
@@ -37,12 +38,19 @@ module.exports.insertUsuario = (req,res) =>{
     
                         else{
                             console.log(resultUser);
+                            //     
+                            res.json({
+                                mensaje
+                            });
                         }  
                     })
                 }
-                res.json({
-                    mensaje
-                });
+                else{
+                    res.json({
+                        mensaje
+                    });
+                }
+
             }
         })
     }

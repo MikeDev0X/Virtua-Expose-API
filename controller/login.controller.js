@@ -5,13 +5,18 @@ const mysql = require('mysql');
 const mysqlConfig = require('../helpers/mysql-config');
 const { NULL } = require('mysql/lib/protocol/constants/types');
 const conexion = mysql.createConnection(mysqlConfig);
+const crypto = require('crypto');
 ////////
 
 module.exports.login = (req,res) =>{
+
     const user = req.body.user;
     const password = req.body.password;
     const sql = `SELECT idUsuario FROM usuario WHERE nickname = ?`
-    const sql2 = `SELECT contrasena FROM usuario WHERE nickname=?`
+    //const sql2 = `SELECT SHA2(contrasena,224) FROM usuario WHERE nickname=?`
+    const sql2 = `SELECT contrasena FROM usuario WHERE nickname=? `
+
+    //const sql3 = `SELECT contrasena FROM usuario WHERE contrasena = SHA2(?,224)`
     let idUsuario;
     let resultUser;
     let resultPassword;
@@ -34,9 +39,7 @@ module.exports.login = (req,res) =>{
             if(error)
                 res.send(error);
             else{
-                //console.log(results[0]);
-
-
+                //console.log(results[0]); //undefined
                 if(results[0] != undefined){
 
                     resultUser = results[0];
@@ -48,15 +51,27 @@ module.exports.login = (req,res) =>{
                             res.send(error);
                         else{
                             resultPassword = results2[0];
-    
-                            //console.log(resultPassword.contrasena === pw);
-    
-                            console.log(resultUser);
+
+                            //////////7
+                            let pwd = pw;
+                            pwd = crypto.createHash('sha224')
+                            .update(pwd)
+                            .digest('hex');
+                            console.log(pwd);
+
+                            ///////////
+
+                            //56
+                            //16
+
                             //console.log(resultPassword);
+        
+                            //console.log(resultUser);
     
                             if(resultUser != undefined ){
+                                console.log(resultPassword);
     
-                                if(resultPassword.contrasena === pw){
+                                if(resultPassword.contrasena === pwd){
     
                                     token = jwt.sign(payload, config.key ,{expiresIn: 7200})
                                     mensaje= 'Usuario o contraseña autenticados'
@@ -74,7 +89,6 @@ module.exports.login = (req,res) =>{
 
                 }
                 else{
-                    //mensaje = "" 
                     res.json({
                         mensaje
                     })
