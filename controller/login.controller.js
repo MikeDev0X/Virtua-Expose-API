@@ -6,6 +6,7 @@ const mysqlConfig = require('../helpers/mysql-config');
 const { NULL } = require('mysql/lib/protocol/constants/types');
 const conexion = mysql.createConnection(mysqlConfig);
 const crypto = require('crypto');
+const { resolveAny } = require('dns');
 ////////
 
 module.exports.login = (req, res) => {
@@ -142,5 +143,37 @@ module.exports.updatePassword = (req, res) => {
 
 
     })
+
+}
+
+module.exports.getUserId = (req,res) =>{
+    const sql = `SELECT idUsuario FROM usuario WHERE nickname = ?`;
+    const nickname = req.params.nickname;
+    let mensaje = "User doesn't exist";
+    let idUsuario;
+
+    conexion.query(sql, [nickname], (error,results,fields)=>{
+        if(error)
+            res.send(error)
+        else{
+            if(results[0]==undefined){
+                res.json({
+                    mensaje
+                })
+            }
+            else{
+                mensaje = "idUsuario found correctly"
+                idUsuario = results[0].idUsuario;
+
+                res.json({
+                    mensaje,
+                    idUsuario    
+                })
+            }
+        }
+
+
+    })
+
 
 }
